@@ -1,4 +1,4 @@
-Tu proyecto, denominado "ToDo App AIEP - Organizador de Tareas Móvil", es una aplicación funcional diseñada para que el usuario gestione sus tareas diarias de manera eficiente.
+El proyecto, denominado "ToDo App AIEP - Organizador de Tareas Móvil", es una aplicación funcional diseñada para que el usuario gestione sus tareas diarias de manera eficiente.
 
 
 
