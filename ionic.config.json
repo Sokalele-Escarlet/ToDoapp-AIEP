@@ -1,0 +1,7 @@
+{
+  "name": "sqliteapp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

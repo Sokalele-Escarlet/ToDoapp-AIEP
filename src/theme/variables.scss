@@ -1,0 +1,32 @@
+:root {
+  /** Colores principales **/
+  --ion-color-primary: #c77dff; /* Púrpura suave */
+  --ion-color-primary-rgb: 199, 125, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #b36ce0;
+  --ion-color-primary-tint: #d18eff;
+
+  --ion-color-secondary: #7dd3fc; /* Celeste pastel */
+  --ion-color-secondary-rgb: 125, 211, 252;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #6bb8e0;
+  --ion-color-secondary-tint: #95dbfd;
+
+  --ion-color-tertiary: #fda4af; /* Rosado claro */
+  --ion-color-tertiary-rgb: 253, 164, 175;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #e0949e;
+  --ion-color-tertiary-tint: #feb5be;
+
+  /** Fondos y texto **/
+  --ion-background-color: #fdfaff; /* Fondo lavanda muy claro */
+  --ion-text-color: #3a3a3a;
+  --ion-color-medium: #9a9ab3; /* Gris lavanda */
+  --ion-color-light: #f4f0ff;
+
+  /** Opcional: gradiente para headers o botones */
+  --app-gradient: linear-gradient(135deg, #c77dff, #7dd3fc, #fda4af);
+}

@@ -1,0 +1,16 @@
+ion-header ion-title {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.2em;
+  background: linear-gradient(135deg, #c77dff, #7dd3fc, #fda4af);
+  color: transparent;
+  background-clip: text;
+  -webkit-text-fill-color: transparent; /* Esto sí es seguro */
+  
+  ion-icon {
+    margin-right: 8px;
+    font-size: 1.2em;
+    color: var(--ion-color-tertiary);
+  }
+}

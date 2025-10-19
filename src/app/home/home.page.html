@@ -1,0 +1,165 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <!-- Título de la App, sin el logo que estaba "flotando" -->
+    <ion-title class="ion-text-start">
+      <ion-icon name="checkbox-outline"></ion-icon> Organizador de Tareas (ToDo)
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="container">
+    
+    <ion-list lines="full" class="ion-padding-bottom">
+      <ion-list-header>
+        <ion-label color="primary">
+          <h2>{{ isEditing ? 'Editar Tarea' : 'Nueva Tarea' }}</h2>
+        </ion-label>
+      </ion-list-header>
+      
+      <!-- Título de la tarea -->
+      <ion-item>
+        <ion-label position="stacked">Título de la tarea (*)</ion-label>
+        <ion-input placeholder="Ej: Comprar leche" [(ngModel)]="person.title" required></ion-input>
+      </ion-item>
+
+      <!-- Descripción -->
+      <ion-item>
+        <ion-label position="stacked">Descripción</ion-label>
+        <ion-textarea placeholder="Detalles de la tarea..." autoGrow="true" [(ngModel)]="person.description"></ion-textarea>
+      </ion-item>
+      
+      <!-- Categoría (ion-select) -->
+      <ion-item>
+        <ion-label position="stacked">Categoría</ion-label>
+        <ion-select [(ngModel)]="person.category" interface="popover">
+          <ion-select-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Prioridad (ion-select) -->
+      <ion-item>
+        <ion-label position="stacked">Nivel de Prioridad</ion-label>
+        <ion-select [(ngModel)]="person.priority" interface="popover" placeholder="Seleccione">
+          <ion-select-option value="baja">Baja</ion-select-option>
+          <ion-select-option value="media">Media</ion-select-option>
+          <ion-select-option value="alta">Alta</ion-select-option>
+        </ion-select>
+      </ion-item>
+      
+      <!-- Botones de Acción -->
+      <div class="ion-padding-vertical">
+        <ion-button 
+          expand="full" 
+          (click)="savePerson()" 
+          [color]="isEditing ? 'warning' : 'success'"
+          [disabled]="!person.title" 
+        >
+          <ion-icon slot="start" [name]="isEditing ? 'save-outline' : 'add-circle-outline'"></ion-icon>
+          {{ isEditing ? 'Guardar Cambios' : 'Agregar Tarea' }}
+        </ion-button>
+        
+        <ion-button *ngIf="isEditing" expand="full" fill="outline" color="medium" (click)="resetForm()">
+          <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+          Cancelar Edición
+        </ion-button>
+      </div>
+    </ion-list>
+    
+    <!-- Separador y Botón de Recarga -->
+    <ion-item-divider color="light">
+      <ion-label>Tareas Pendientes ({{ people.length }})</ion-label>
+      <ion-button 
+        slot="end" 
+        fill="clear" 
+        color="dark" 
+        (click)="filterCategory = ''; filterPriority = ''; loadPeople()"
+      >
+        <ion-icon name="sync-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item-divider>
+
+    <!-- Sección de Filtros -->
+    <ion-grid class="filter-grid">
+      <ion-row>
+        <ion-col size="6">
+          <ion-select label="Filtrar Categoría" interface="popover" [(ngModel)]="filterCategory" (ionChange)="filterPriority = ''; loadPeople()" placeholder="Todas">
+            <ion-select-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="6">
+          <ion-select label="Filtrar Prioridad" interface="popover" [(ngModel)]="filterPriority" (ionChange)="filterCategory = ''; loadPeople()" placeholder="Todas">
+            <ion-select-option value="baja">Baja</ion-select-option>
+            <ion-select-option value="media">Media</ion-select-option>
+            <ion-select-option value="alta">Alta</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+    <!-- Lista de Tareas -->
+    <ion-list *ngIf="people.length > 0">
+      <ion-item-sliding *ngFor="let p of people">
+        <ion-item [class.task-completed]="p.status === 'completada'">
+          <ion-icon 
+            slot="start" 
+            [name]="p.status === 'completada' ? 'checkmark-circle-outline' : 'radio-button-off-outline'" 
+            [color]="p.status === 'completada' ? 'success' : 'medium'"
+          ></ion-icon>
+          <ion-label>
+            <h2>{{ p.title }}</h2>
+            <p *ngIf="p.description">{{ p.description }}</p>
+            <div class="task-metadata">
+              <ion-badge color="secondary">{{ p.category }}</ion-badge>
+              <ion-badge [color]="p.priority === 'alta' ? 'danger' : p.priority === 'media' ? 'warning' : 'primary'">
+                Prioridad: {{ p.priority | titlecase }}
+              </ion-badge>
+              <ion-badge [color]="p.status === 'completada' ? 'success' : 'light'">
+                {{ p.status | titlecase }}
+              </ion-badge>
+            </div>
+          </ion-label>
+        </ion-item>
+        
+        <!-- Botones de Deslizar -->
+        <ion-item-options side="end">
+          <ion-item-option [color]="p.status === 'pendiente' ? 'success' : 'medium'" (click)="toggleTaskStatus(p)">
+            <ion-icon slot="icon-only" [name]="p.status === 'pendiente' ? 'checkmark-done-circle-outline' : 'refresh-circle-outline'"></ion-icon>
+          </ion-item-option>
+          
+          <ion-item-option color="warning" (click)="editPerson(p)">
+            <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+          </ion-item-option>
+          
+          <ion-item-option color="danger" (click)="deletePerson(p.id)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+    
+    <!-- Mensaje si no hay tareas -->
+    <div class="empty-state" *ngIf="people.length === 0">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>No hay tareas pendientes. ¡Añade una arriba o revisa tus filtros!</p>
+    </div>
+
+  </div>
+</ion-content>
+
+<!-- Créditos y Logo AIEP (Requisito) -->
+<ion-footer>
+  <ion-toolbar color="dark">
+    <ion-text color="light" class="ion-text-center ion-padding-vertical" style="display: flex; flex-direction: column; align-items: center;">
+      <!-- Logo AIEP -->
+      <img 
+        src="assets/logo-aiep-blanco.png" 
+        alt="Logo AIEP" 
+        style="height: 50px; vertical-align: middle; margin-bottom: 5px; border-radius: 4px; padding: 2px;"
+      >
+      <!-- Nombre del desarrollador -->
+      <p style="font-size: 0.8em; margin: 0;">Evaluación Taller de App Móviles | Escarlet Ojeda</p>
+    </ion-text>
+  </ion-toolbar>
+</ion-footer>
